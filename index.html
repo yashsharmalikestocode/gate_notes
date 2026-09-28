@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090d12" />
+  <meta name="description" content="Exam Atlas turns question-solving notes into a searchable, connected study system." />
+  <title>Exam Atlas — See the pattern. Solve the problem.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+  <section id="auth-screen" class="auth-screen">
+    <div class="auth-ambient auth-ambient-one"></div>
+    <div class="auth-ambient auth-ambient-two"></div>
+    <div class="auth-intro">
+      <a class="brand brand-large" href="#" aria-label="Exam Atlas home">
+        <span class="brand-mark"><i data-lucide="orbit"></i></span>
+        <span>Exam Atlas</span>
+      </a>
+      <div class="eyebrow"><span></span> A thinking system for serious exam prep</div>
+      <h1>See the pattern.<br /><em>Solve the problem.</em></h1>
+      <p>Capture how questions are tackled, connect recurring ideas, and turn every study session into visible progress.</p>
+      <div class="auth-preview" aria-hidden="true">
+        <div class="preview-orbit orbit-one"></div>
+        <div class="preview-orbit orbit-two"></div>
+        <div class="preview-node preview-node-main"><span>∫</span><small>Substitution</small></div>
+        <div class="preview-node preview-node-a"><span>ƒ</span><small>Symmetry</small></div>
+        <div class="preview-node preview-node-b"><span>π</span><small>Limits</small></div>
+        <div class="preview-node preview-node-c"><span>Σ</span><small>Series</small></div>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-tabs" role="tablist" aria-label="Account access">
+          <button class="auth-tab active" data-auth-mode="login" role="tab">Sign in</button>
+          <button class="auth-tab" data-auth-mode="signup" role="tab">Create account</button>
+        </div>
+        <div id="auth-heading">
+          <h2>Welcome back</h2>
+          <p>Pick up exactly where you left off.</p>
+        </div>
+        <form id="auth-form">
+          <label class="field">
+            <span>Email address</span>
+            <span class="input-shell"><i data-lucide="mail"></i><input id="auth-email" type="email" autocomplete="email" placeholder="you@example.com" required /></span>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <span class="input-shell"><i data-lucide="lock-keyhole"></i><input id="auth-password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required /><button id="toggle-password" type="button" class="icon-btn bare" aria-label="Show password"><i data-lucide="eye"></i></button></span>
+          </label>
+          <button id="auth-submit" class="button primary full" type="submit">Sign in <i data-lucide="arrow-right"></i></button>
+          <button id="forgot-password" class="text-button" type="button">Forgot your password?</button>
+        </form>
+        <div class="auth-note"><i data-lucide="shield-check"></i><span>Your notes stay private to your account and are protected by database-level access rules.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a class="brand" href="#dashboard" data-go="dashboard">
+          <span class="brand-mark"><i data-lucide="orbit"></i></span>
+          <span>Exam Atlas</span>
+        </a>
+        <button id="close-sidebar" class="icon-btn mobile-only" aria-label="Close navigation"><i data-lucide="x"></i></button>
+      </div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <p class="nav-label">Workspace</p>
+        <button class="nav-item active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Overview</span></button>
+        <button class="nav-item" data-view="add-note"><i data-lucide="square-pen"></i><span>Add note</span><kbd>N</kbd></button>
+        <button class="nav-item" data-view="library"><i data-lucide="library-big"></i><span>Note library</span><span id="nav-note-count" class="nav-count">0</span></button>
+        <button class="nav-item" data-view="graph"><i data-lucide="share-2"></i><span>Knowledge graph</span></button>
+        <p class="nav-label">Insights</p>
+        <button class="nav-item" data-view="progress"><i data-lucide="chart-no-axes-combined"></i><span>Progress log</span></button>
+        <button class="nav-item" data-view="data"><i data-lucide="database"></i><span>Data &amp; backup</span></button>
+      </nav>
+      <div class="sidebar-card">
+        <div class="sidebar-card-icon"><i data-lucide="sparkles"></i></div>
+        <strong>Today’s intention</strong>
+        <p id="sidebar-intention">Add one useful pattern from every problem you solve.</p>
+      </div>
+      <div class="user-block">
+        <span id="user-avatar" class="avatar">EA</span>
+        <span class="user-copy"><strong id="user-name">Student</strong><small id="user-email"></small></span>
+        <button id="logout-button" class="icon-btn" aria-label="Sign out" title="Sign out"><i data-lucide="log-out"></i></button>
+      </div>
+    </aside>
+    <div id="sidebar-scrim" class="sidebar-scrim"></div>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="open-sidebar" class="icon-btn mobile-only" aria-label="Open navigation"><i data-lucide="menu"></i></button>
+          <div><p id="view-kicker" class="page-kicker">Workspace / Overview</p><h2 id="view-title">Your study cockpit</h2></div>
+        </div>
+        <div class="topbar-actions">
+          <label class="global-search"><i data-lucide="search"></i><input id="global-search" type="search" placeholder="Search notes…" /><kbd>⌘ K</kbd></label>
+          <button class="button primary compact" data-go="add-note"><i data-lucide="plus"></i><span>New note</span></button>
+        </div>
+      </header>
+
+      <div id="loading-state" class="loading-state">
+        <span class="spinner"></span><p>Building your atlas…</p>
+      </div>
+
+      <div id="view-container" class="view-container hidden">
+        <section id="view-dashboard" class="app-view active" data-view-panel="dashboard">
+          <div class="hero-row">
+            <div><p class="eyebrow"><span></span> <span id="today-label">Today</span></p><h1 id="greeting">Good evening, scholar.</h1><p>Your preparation becomes more powerful when every solved problem leaves a reusable trail.</p></div>
+            <button class="button ghost" data-go="progress"><i data-lucide="calendar-plus"></i> Log today</button>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card accent-blue"><div class="metric-top"><span class="metric-icon"><i data-lucide="notebook-pen"></i></span><span id="notes-delta" class="metric-badge">This week</span></div><strong id="metric-notes">0</strong><p>Total notes</p><small id="metric-notes-caption">Start your atlas with one note</small></article>
+            <article class="metric-card accent-green"><div class="metric-top"><span class="metric-icon"><i data-lucide="circle-check-big"></i></span><span class="metric-badge">Today</span></div><strong id="metric-questions">0</strong><p>Questions solved</p><small id="metric-questions-caption">No progress logged yet</small></article>
+            <article class="metric-card accent-violet"><div class="metric-top"><span class="metric-icon"><i data-lucide="timer"></i></span><span class="metric-badge">Today</span></div><strong id="metric-time">0m</strong><p>Focused study</p><small id="metric-time-caption">Log time to track consistency</small></article>
+            <article class="metric-card accent-orange"><div class="metric-top"><span class="metric-icon"><i data-lucide="flame"></i></span><span class="metric-badge">Streak</span></div><strong id="metric-streak">0</strong><p>Active days</p><small id="metric-streak-caption">A note or log keeps it alive</small></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel trend-panel">
+              <div class="panel-heading"><div><p class="section-label">Momentum</p><h3>Your last 14 days</h3></div><select id="dashboard-chart-metric" class="select-control" aria-label="Chart metric"><option value="questions">Questions solved</option><option value="notes">Notes added</option><option value="minutes">Study minutes</option></select></div>
+              <div class="chart-wrap chart-large"><canvas id="dashboard-chart"></canvas></div>
+            </article>
+            <article class="panel focus-panel">
+              <div class="panel-heading"><div><p class="section-label">Topic map</p><h3>Where your effort goes</h3></div><button class="icon-btn" data-go="graph" aria-label="Open knowledge graph"><i data-lucide="maximize-2"></i></button></div>
+              <div id="topic-breakdown" class="topic-breakdown empty-state-mini">Add notes to see your topic balance.</div>
+            </article>
+            <article class="panel recent-panel">
+              <div class="panel-heading"><div><p class="section-label">Fresh thinking</p><h3>Recent notes</h3></div><button class="text-button inline" data-go="library">View all <i data-lucide="arrow-up-right"></i></button></div>
+              <div id="recent-notes" class="recent-list"></div>
+            </article>
+            <article class="panel heatmap-panel">
+              <div class="panel-heading"><div><p class="section-label">Consistency</p><h3>Study activity</h3></div><span class="subtle" id="heatmap-caption">Last 12 weeks</span></div>
+              <div id="activity-heatmap" class="activity-heatmap" aria-label="Study activity heatmap"></div>
+              <div class="heatmap-legend"><span>Less</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>More</span></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="view-add-note" class="app-view" data-view-panel="add-note">
+          <div class="section-intro"><div><p class="eyebrow"><span></span> Capture the method, not just the answer</p><h1 id="note-form-title">Add a question note</h1><p>Record the choices, patterns, and traps that will help future-you solve faster.</p></div><button id="clear-note-form" class="button ghost"><i data-lucide="rotate-ccw"></i> Clear form</button></div>
+          <form id="note-form" class="note-layout">
+            <input id="note-id" type="hidden" />
+            <div class="panel note-editor">
+              <div class="form-grid two">
+                <label class="field field-wide"><span>Note title *</span><input id="note-title" type="text" placeholder="e.g. Definite integral using symmetry" required /></label>
+                <label class="field"><span>Question ID</span><input id="note-question-id" type="text" placeholder="GATE-2024-PH-Q31" /></label>
+                <label class="field"><span>Exam</span><input id="note-exam" type="text" placeholder="GATE Physics" /></label>
+                <label class="field"><span>Year</span><input id="note-year" type="number" min="1900" max="2100" placeholder="2024" /></label>
+                <label class="field field-wide"><span>Topics <small>comma separated</small></span><input id="note-topics" type="text" placeholder="Calculus, Definite integrals, Symmetry" /></label>
+                <label class="field"><span>Difficulty</span><select id="note-difficulty"><option value="medium">Medium</option><option value="easy">Easy</option><option value="hard">Hard</option></select></label>
+                <label class="field"><span>Status</span><select id="note-status"><option value="understood">Understood</option><option value="review">Needs review</option><option value="mastered">Mastered</option></select></label>
+              </div>
+              <label class="field"><span>Approach / solution path *</span><textarea id="note-body" rows="8" placeholder="How should this kind of problem be recognized and tackled? Write the chain of reasoning, not only the final calculation." required></textarea></label>
+              <div class="form-grid two">
+                <label class="field"><span>Key insight</span><textarea id="note-insight" rows="4" placeholder="The single idea that unlocks the question…"></textarea></label>
+                <label class="field"><span>Traps &amp; mistakes</span><textarea id="note-traps" rows="4" placeholder="Common wrong turns, sign errors, assumptions…"></textarea></label>
+                <label class="field"><span>Formulae / shortcuts</span><textarea id="note-formulas" rows="3" placeholder="Useful identities and shortcuts…"></textarea></label>
+                <label class="field"><span>References / links</span><textarea id="note-references" rows="3" placeholder="Books, videos, URLs…"></textarea></label>
+              </div>
+            </div>
+            <aside class="note-side">
+              <div class="panel sticky-card">
+                <p class="section-label">Connections</p><h3>Link related notes</h3><p class="subtle">Connections become edges in your knowledge graph.</p>
+                <input id="related-note-search" type="search" placeholder="Find a note to link…" />
+                <div id="related-note-options" class="related-options"></div>
+                <div class="divider"></div>
+                <p class="section-label">Save note</p>
+                <div class="save-summary"><i data-lucide="cloud-check"></i><span>Saved privately to your account and synced across devices.</span></div>
+                <button id="save-note-button" class="button primary full" type="submit"><i data-lucide="save"></i> Save note</button>
+                <small class="keyboard-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> to save</small>
+              </div>
+            </aside>
+          </form>
+        </section>
+
+        <section id="view-library" class="app-view" data-view-panel="library">
+          <div class="section-intro library-intro"><div><p class="eyebrow"><span></span> Your question-solving memory</p><h1>Note library</h1><p>Search the way you remember: by idea, exam, question ID, or topic.</p></div><div class="button-row"><button id="export-notes-button" class="button ghost"><i data-lucide="download"></i> Export JSON</button><button class="button primary" data-go="add-note"><i data-lucide="plus"></i> New note</button></div></div>
+          <div class="panel library-toolbar">
+            <label class="library-search"><i data-lucide="search"></i><input id="library-search" type="search" placeholder="Search… try topic:calculus or qid:2024" /></label>
+            <select id="filter-topic" class="select-control"><option value="">All topics</option></select>
+            <select id="filter-status" class="select-control"><option value="">Any status</option><option value="understood">Understood</option><option value="review">Needs review</option><option value="mastered">Mastered</option></select>
+            <select id="sort-notes" class="select-control"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="title">Title A–Z</option></select>
+          </div>
+          <div class="library-summary"><p id="library-count">0 notes</p><div id="active-filters" class="chip-row"></div></div>
+          <div id="notes-grid" class="notes-grid"></div>
+        </section>
+
+        <section id="view-graph" class="app-view graph-view" data-view-panel="graph">
+          <div class="section-intro graph-intro"><div><p class="eyebrow"><span></span> Explore recurring structures</p><h1>Knowledge graph</h1><p>Hover to expand a note, follow shared topics, and discover patterns across exams.</p></div><div class="graph-legend"><span><i class="legend-dot note-dot"></i> Note</span><span><i class="legend-dot topic-dot"></i> Topic</span><span><i class="legend-line"></i> Connection</span></div></div>
+          <div class="panel graph-shell">
+            <div class="graph-toolbar"><label><i data-lucide="search"></i><input id="graph-search" type="search" placeholder="Find a node…" /></label><select id="graph-mode" class="select-control"><option value="topics">Notes + topics</option><option value="notes">Notes only</option></select><button id="reset-graph" class="button ghost compact"><i data-lucide="scan"></i> Recenter</button></div>
+            <div id="graph-canvas" class="graph-canvas"><svg id="knowledge-graph" role="img" aria-label="Interactive graph of notes and topics"></svg><div id="graph-empty" class="graph-empty hidden"><i data-lucide="share-2"></i><h3>Your graph is waiting</h3><p>Add a few notes with topics or explicit links to reveal connections.</p><button class="button primary" data-go="add-note">Add your first note</button></div><div id="graph-tooltip" class="graph-tooltip hidden"></div></div>
+          </div>
+        </section>
+
+        <section id="view-progress" class="app-view" data-view-panel="progress">
+          <div class="section-intro"><div><p class="eyebrow"><span></span> Progress you can actually see</p><h1>Daily progress log</h1><p>Track output, focused time, and the notes created automatically from your atlas.</p></div><button id="open-log-form" class="button primary"><i data-lucide="plus"></i> Log a day</button></div>
+          <div id="progress-form-panel" class="panel progress-form-panel">
+            <form id="progress-form">
+              <div class="panel-heading"><div><p class="section-label">Daily check-in</p><h3>What did you move forward?</h3></div><button id="close-log-form" class="icon-btn" type="button" aria-label="Close progress form"><i data-lucide="x"></i></button></div>
+              <div class="form-grid progress-fields">
+                <label class="field"><span>Date</span><input id="progress-date" type="date" required /></label>
+                <label class="field"><span>Questions solved</span><input id="progress-questions" type="number" min="0" step="1" value="0" required /></label>
+                <label class="field"><span>Study time</span><div class="input-with-suffix"><input id="progress-minutes" type="number" min="0" step="5" value="0" required /><span>minutes</span></div></label>
+                <label class="field field-wide"><span>Reflection <small>optional</small></span><input id="progress-reflection" type="text" placeholder="What clicked today? What needs another pass?" /></label>
+              </div>
+              <div class="form-actions"><span class="subtle">Saving the same date updates that day’s entry.</span><button class="button primary" type="submit"><i data-lucide="check"></i> Save progress</button></div>
+            </form>
+          </div>
+          <div class="progress-metrics metric-grid three">
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon accent-green"><i data-lucide="target"></i></span><span class="metric-badge">Last 7 days</span></div><strong id="progress-total-questions">0</strong><p>Questions solved</p></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon accent-violet"><i data-lucide="clock-3"></i></span><span class="metric-badge">Last 7 days</span></div><strong id="progress-total-hours">0h</strong><p>Study time</p></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon accent-blue"><i data-lucide="file-plus-2"></i></span><span class="metric-badge">Last 7 days</span></div><strong id="progress-total-notes">0</strong><p>Notes added</p></article>
+          </div>
+          <div class="progress-chart-grid">
+            <article class="panel"><div class="panel-heading"><div><p class="section-label">Output</p><h3>Questions &amp; notes</h3></div><select id="progress-range" class="select-control"><option value="14">14 days</option><option value="30">30 days</option><option value="90">90 days</option></select></div><div class="chart-wrap"><canvas id="output-chart"></canvas></div></article>
+            <article class="panel"><div class="panel-heading"><div><p class="section-label">Focus</p><h3>Study time</h3></div></div><div class="chart-wrap"><canvas id="time-chart"></canvas></div></article>
+          </div>
+          <article class="panel log-history"><div class="panel-heading"><div><p class="section-label">History</p><h3>Recent check-ins</h3></div></div><div id="progress-history" class="table-wrap"></div></article>
+        </section>
+
+        <section id="view-data" class="app-view" data-view-panel="data">
+          <div class="section-intro"><div><p class="eyebrow"><span></span> Your work, always portable</p><h1>Data &amp; backup</h1><p>Export a complete, structured copy of your notes and progress whenever you like.</p></div></div>
+          <div class="data-grid">
+            <article class="panel data-card"><span class="data-icon"><i data-lucide="file-json-2"></i></span><div><h3>Export everything</h3><p>Download notes, links, topics, and daily progress as one readable JSON file.</p></div><button id="export-all-button" class="button primary"><i data-lucide="download"></i> Download JSON</button></article>
+            <article class="panel data-card"><span class="data-icon"><i data-lucide="file-up"></i></span><div><h3>Import a backup</h3><p>Restore an Exam Atlas export. Existing items are updated safely by ID.</p></div><input id="import-file" type="file" accept="application/json" hidden /><button id="import-button" class="button ghost"><i data-lucide="upload"></i> Choose JSON file</button></article>
+            <article class="panel data-card safety-card"><span class="data-icon"><i data-lucide="shield-check"></i></span><div><h3>Private by design</h3><p>Every database request is checked against your signed-in account. Friends get separate private workspaces.</p></div><span class="status-pill"><i data-lucide="lock"></i> Row-level security</span></article>
+            <article class="panel data-card danger-card"><span class="data-icon"><i data-lucide="trash-2"></i></span><div><h3>Delete your data</h3><p>Permanently remove all notes and progress entries in this account.</p></div><button id="delete-all-button" class="button danger"><i data-lucide="trash-2"></i> Delete everything</button></article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="note-dialog" class="note-dialog">
+    <div class="dialog-head"><div><p id="dialog-meta" class="section-label"></p><h2 id="dialog-title"></h2></div><button id="close-note-dialog" class="icon-btn" aria-label="Close note"><i data-lucide="x"></i></button></div>
+    <div id="dialog-content" class="dialog-content"></div>
+    <div class="dialog-actions"><button id="dialog-edit" class="button ghost"><i data-lucide="pencil"></i> Edit</button><button id="dialog-delete" class="button danger"><i data-lucide="trash-2"></i> Delete</button></div>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="confirm-dialog">
+    <span class="confirm-icon"><i data-lucide="triangle-alert"></i></span><h2 id="confirm-title">Are you sure?</h2><p id="confirm-message"></p><div class="dialog-actions"><button id="confirm-cancel" class="button ghost">Cancel</button><button id="confirm-accept" class="button danger">Delete</button></div>
+  </dialog>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    if (!window.supabase) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>');
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/graph.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
